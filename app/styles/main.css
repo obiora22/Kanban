@@ -1,0 +1,37 @@
+body {
+  font-family: monospace;
+}
+.checkList-task-remove::after {
+  display: inline-block;
+  content: '+';
+}
+.card {
+  position: relative;
+  z-index: 1;
+  background-color: #fff;
+  box-shadow: 0 1px 0 rgba(0, 0, 0, 0.25);
+}
+.card h3 {
+  border: 2px solid #000;
+}
+.card p {
+  padding: 10px;
+  border-bottom: 2px dotted #000;
+}
+
+.card p, .card h3 {
+  text-align: center;
+  width: 80%;
+  margin: 15px auto;
+}
+
+fieldset {
+  margin-left: 5px;
+}
+
+.form-check-input {
+  margin-right: 10px!important;
+}
+.list {
+  background: linear-gradient(to bottom, #eee 0%, #ccc 50%, #eee 100%) fixed;
+}
