@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import CheckList from './CheckList';
+import marked from 'marked';
 var PropTypes = React.PropTypes;
 
 class Card extends Component {
@@ -36,9 +37,13 @@ class Card extends Component {
     return (
       <div style={{border: "1px solid purple"}} className="card">
         <h3>{this.props.title}</h3>
-        <p>{this.props.description}</p>
+        <span dangerouslySetInnerHTML={{__html: marked(this.props.description)}}/>
         <button className="card-detail-reveal-btn" type="button" onClick={this.toggleDetails}>{this.state.showDetails ? "hide" : "show"}</button>
         {this.state.showDetails ? cardDetails : null}
+        <form>
+          <input type="text" placeholder="Type and hit enter to add a task."/>
+          <button type="submit">Create Task</button>
+        </form>
       </div>
     );
   }

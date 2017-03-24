@@ -1,13 +1,21 @@
 import React from 'react';
 var PropTypes = React.PropTypes;
-function CheckList(props) {
-  return (
-      <label className="form-check-label">
-        <input className="form-check-input" type="checkbox" name='done' value="done" defaultChecked={props.done}/>
-        {props.name}
-        <a href="#" className="checkList-task-remove" />
-      </label>
-  );
+class CheckList extends React.Component {
+  constructor() {
+    super()
+    this.state = {
+     
+    }
+  }
+  render() {
+    return (
+        <label className="form-check-label">
+          <input className="form-check-input" type="checkbox" name='done' defaultChecked={this.props.done} /> 
+          {this.props.name}
+          <a href="#" className="checkList-task-remove" />
+        </label>
+    );
+  }
 }
 
 CheckList.propTypes = {
