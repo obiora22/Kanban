@@ -21,8 +21,10 @@
     "webpack-dev-server": "^2.4.2"
   },
   "dependencies": {
+    "immutability-helper": "^2.1.2",
     "marked": "^0.3.6",
     "react": "^15.4.2",
+    "react-addons-css-transition-group": "^15.4.2",
     "react-dom": "^15.4.2"
   }
 }

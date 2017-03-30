@@ -1,0 +1,37 @@
+input {
+  border: 1px solid orange;
+}
+
+.item {
+  background-color: yellow;
+  cursor: pointer;
+}
+.item-enter {
+  opacity: 0.01;
+  transform: translateX(-250px);
+}
+
+.item-enter.item-enter-active {
+  opacity: 1;
+  transform: translateX(0);
+  transition: 0.3s;
+}
+
+.item-leave {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.item-leave.item-leave-active {
+  opacity: 0.01;
+  transform: translateX(-250px);
+  transition-duration:2s;
+}
+
+.item-appear {
+  opacity: 0.01;
+}
+.item-appear.item-appear-active {
+  opacity: 1;
+  transition: opacity 1500ms ease-in;
+}

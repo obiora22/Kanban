@@ -1,9 +1,11 @@
 import React, {Component} from 'react';
 import ReactDOM from 'react-dom';
 import List from './List';
+
+var PropTypes = React.PropTypes;
+
 class KanbanBoard extends Component {
   render() {
-    console.log('KBoard',this.props);
     return (
       <div className="row" id="kanbanboard" style={{border: "1px solid red"}}>
         <div className="col-md-4">
@@ -12,7 +14,9 @@ class KanbanBoard extends Component {
             this.props.cards.filter((card) => {
               return card.status === 'todo';
             })
-          }/>
+          }
+          taskCallbacks={this.props.taskCallbacks}
+          />
         </div>
         <div className="col-md-4">
         <h1>In Progress</h1>
@@ -20,7 +24,9 @@ class KanbanBoard extends Component {
             this.props.cards.filter((card) => {
               return card.status === 'in-progress';
             })
-          }/>
+          }
+          taskCallbacks={this.props.taskCallbacks}
+          />
         </div>
         <div className="col-md-4">
         <h1>Done</h1>
@@ -28,7 +34,9 @@ class KanbanBoard extends Component {
             this.props.cards.filter((card) => {
               return card.status === 'done';
             })
-          }/>
+          }
+          taskCallbacks={this.props.taskCallbacks}
+          />
         </div>
       </div>
     );
@@ -36,6 +44,7 @@ class KanbanBoard extends Component {
 }
 
 KanbanBoard.propTypes = {
-  cards: React.PropTypes.array.isRequired
+  cards: PropTypes.array.isRequired,
+  taskCallbacks: PropTypes.object.isRequired
 }
 export default KanbanBoard;

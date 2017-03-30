@@ -3,7 +3,9 @@ body {
 }
 .checkList-task-remove::after {
   display: inline-block;
-  content: '+';
+  font-weight: bold;
+  margin-left: 10px;
+  content: ' X ';
 }
 .card {
   position: relative;

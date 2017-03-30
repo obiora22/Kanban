@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import ReactDOM from 'react-dom';
 import KanbanBoard from './KanbanBoard';
-
+import KanbanBoardContainer from '../containers/KanbanBoardContainer';
 let cardsList = [
 {
 id: 1,
@@ -39,7 +39,7 @@ class App extends Component {
     console.log(cardsList);
     return (
       <div style={{border: "1px solid green", padding: "10px"}}>
-      <KanbanBoard cards={cardsList}/>
+      <KanbanBoardContainer />
       </div>
     );
   }
