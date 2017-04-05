@@ -7,5 +7,7 @@ import KanbanBoard from './components/KanbanBoard';
 import GroceryList from './components/Example';
 import App from './components/App'; // main app
 import AnimatedShoppingList from './components/AnimatedShoppingList';
-
-ReactDOM.render(<AnimatedShoppingList />, document.getElementById('root'));
+import SnackShopContainer from './components/SnackShopApp/SnackShopContainer';
+//ReactDOM.render(<AnimatedShoppingList />, document.getElementById('root'));
+// ReactDOM.render(<SnackShopContainer />, document.getElementById('root'));
+ReactDOM.render(<App/>, document.getElementById('root'));

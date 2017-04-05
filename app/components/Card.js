@@ -54,6 +54,9 @@ class Card extends Component {
         <span dangerouslySetInnerHTML={{__html: marked(this.props.description)}}/>
         <button className="card-detail-reveal-btn" type="button" onClick={this.toggleDetails}>{this.state.showDetails ? "hide" : "show"}</button>
         {this.state.showDetails ? cardDetails : null}
+        {
+          
+        }
         // task add form
         <form onSubmit={this.handleUserInput.bind(this)}>
           <input type="text" name="taskName" placeholder="Type and hit enter to add a task." />
