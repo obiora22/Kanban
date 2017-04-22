@@ -31,7 +31,8 @@ class KanbanBoardContainer extends Component {
       method: 'put',
       headers: API_HEADERS,
       body: JSON.stringify({status: currentCard.status, row_order_position: cardIndex})
-      .then((response) => {
+    })
+    .then((response) => {
         if (!response.ok) {
           throw new Error('Oops! Something went wrong.');
         }
@@ -48,8 +49,6 @@ class KanbanBoardContainer extends Component {
           })
         )
       })
-
-    })
   }
   // called when card hovers over list 
   updateCardStatus(cardId, listType) {

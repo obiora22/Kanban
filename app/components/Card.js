@@ -25,7 +25,7 @@ var cardSpec = {
     };
   },
   endDrag(props, monitor, component) {
-    cardCallbacks.persistCardDrag(props.id, props.status);
+    props.cardCallbacks.persistCardDrag(props.cardId, props.status);
   }
 }
 
