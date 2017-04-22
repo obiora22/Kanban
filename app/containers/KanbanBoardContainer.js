@@ -1,11 +1,14 @@
 import React, {Component} from 'react';
 import KanbanBoard from '../components/KanbanBoard';
 import update from 'immutability-helper';
-
+import HTML5Backend from 'react-dnd-html5-backend';
+import {DragDropContext} from 'react-dnd';
+import {throttle} from '../utils/throttle';
 const API_URL = 'http://Kanbanapi.pro-react.com';
 const API_HEADERS = {
   'content-type' : 'application/json',
-  Authorization: 'nas22@gmail.com'
+  Authorization: 'nas22@gmail.com',
+  'Access-Control-Allow-Origin' : '*'
 }
 
 class KanbanBoardContainer extends Component {
@@ -13,6 +16,76 @@ class KanbanBoardContainer extends Component {
     super();
     this.state = {
       cards: []
+    }
+    // call when arguments change
+    this.updateCardStatus = throttle(this.updateCardStatus.bind(this));
+    //call at max every 500ms or (when arguments change)
+    this.updateCardPosition = throttle(this.updateCardPosition.bind(this), 500);
+  }
+  persistCardDrag(cardId, prevStatus) {
+    var cardIndex = this.state.cards.findIndex((card) => {
+      return cardId === card.id;
+    });
+    var currentCard = this.state.cards[cardIndex];
+    fetch(`${API_URL}/cards/${cardId}`, {
+      method: 'put',
+      headers: API_HEADERS,
+      body: JSON.stringify({status: currentCard.status, row_order_position: cardIndex})
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error('Oops! Something went wrong.');
+        }
+      }).catch((error) => {
+        console.error('Request error:', error);
+        this.setState(
+          // Update state with previous card status
+          update(this.state, {
+            cards: {
+              [cardIndex]: {
+                status: {$set,prevStatus}
+              }
+            }
+          })
+        )
+      })
+
+    })
+  }
+  // called when card hovers over list 
+  updateCardStatus(cardId, listType) {
+    var cardIndex = this.state.cards.findIndex((card) => {
+      return card.id === cardId;
+    });
+    // find current card
+    var card = this.state.cards[cardIndex];
+    if (card.status !== listType ) {
+      var updatedCardList = update(this.state.cards, {
+        [cardIndex]: {
+          status: {$set: listType} // update new list card is being dragged into
+        }
+      });
+      this.setState({
+        cards: updatedCardList
+      })
+    }
+  }
+  updateCardPosition(cardId, afterId) {
+    //proceed if hovering over a different card 
+    if (cardId !== afterId) {
+      var cardIndex = this.state.cards.findIndex((card) => {
+        return card.id === cardId;
+      });
+      var afterIndex = this.state.cards.findIndex((card) => {
+        return card.id === afterId;
+      });
+      var currentCard = this.state.cards[cardIndex];
+      // remove currentCard and reinsert it into new index 
+      var newCards = update(this.state.cards, 
+        {$splice: [[cardIndex, 1], [afterIndex, 0, currentCard]]}
+      );
+      this.setState({
+        cards: newCards
+      })
     }
   }
   addTask(cardId, taskName) {
@@ -115,9 +188,14 @@ class KanbanBoardContainer extends Component {
           delete: this.deleteTask.bind(this),
           toggle: this.toggleTask.bind(this)
         }}
+        cardCallbacks={{
+          updateCardStatus: this.updateCardStatus,
+          updateCardPosition: this.updateCardPosition,
+          persistCardDrag: this.persistCardDrag.bind(this)
+        }}
       />
     );
   }
 }
 
-export default KanbanBoardContainer;
+export default DragDropContext(HTML5Backend)(KanbanBoardContainer);

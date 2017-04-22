@@ -1,11 +1,18 @@
 import React, {Component, PropTypes} from 'react';
 import {DropTarget} from 'react-dnd';
-
+import update from 'immutability-helper';
+import Snack from './Snack';
+var snacks = ['Beef pattie']
 // spec 
 // dropTarget methods(all optional): 'drop', 'hover', 'canDrop'.
 var spec = {
-  drop() {
+  drop(props, monitor, component) {
+    console.log(monitor.getItem());
+    component.updateSnacks(monitor.getItem().name);
     return {name: 'Shopping cart'};
+  },
+  hover(props, monitor, component) {
+    
   }
 }
 
@@ -19,6 +26,24 @@ var collect = (connect, monitor) => {
   }
 }
 class SnackCart extends Component {
+  constructor() {
+    super();
+    this.updateSnacks = this.updateSnacks.bind(this);
+    this.state = {
+      snacks: snacks
+    };
+  }
+  updateSnacks(newSnack) {
+    
+    var newSnacks = update(this.state.snacks, {
+      $push: [newSnack]
+    });
+    console.log(newSnacks);
+    this.setState({
+      snacks: newSnacks
+    });
+    console.log(this.state.snacks);
+  }
   render() {
    
     const {isOver, canDrop} = this.props;
@@ -27,9 +52,7 @@ class SnackCart extends Component {
 
     if (isActive) {
       backgroundColor = 'orange';
-    } else  if (canDrop) {
-      backgroundColor = 'blue';
-    }
+    } 
 
     const style = {
       backgroundColor: backgroundColor,
@@ -38,6 +61,9 @@ class SnackCart extends Component {
     return this.props.connectDropTarget(
       <div className="shopping-cart" style={style}>
         { isActive ? 'Yes, finally, Snacks!' : 'Drag snacks over here to order!'}
+        {this.state.snacks.map((snackName, index) => {
+          return <Snack key={index} name={snackName}/>
+        })}
       </div>
     );
   }

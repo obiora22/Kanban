@@ -16,6 +16,7 @@ class KanbanBoard extends Component {
             })
           }
           taskCallbacks={this.props.taskCallbacks}
+          cardCallbacks={this.props.cardCallbacks}
           />
         </div>
         <div className="col-md-4">
@@ -26,16 +27,18 @@ class KanbanBoard extends Component {
             })
           }
           taskCallbacks={this.props.taskCallbacks}
+          cardCallbacks={this.props.cardCallbacks}
           />
         </div>
         <div className="col-md-4">
         <h1>Done</h1>
-          <List id="done" title="Done" cards={
+          <List id="done" title="done" cards={
             this.props.cards.filter((card) => {
               return card.status === 'done';
             })
           }
           taskCallbacks={this.props.taskCallbacks}
+          cardCallbacks={this.props.cardCallbacks}
           />
         </div>
       </div>
@@ -45,6 +48,7 @@ class KanbanBoard extends Component {
 
 KanbanBoard.propTypes = {
   cards: PropTypes.array.isRequired,
-  taskCallbacks: PropTypes.object.isRequired
+  taskCallbacks: PropTypes.object.isRequired,
+  cardCallbacks: PropTypes.object.isRequired
 }
 export default KanbanBoard;

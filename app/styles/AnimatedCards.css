@@ -1,0 +1,19 @@
+.toggle-enter {
+  max-height: 0;
+  overflow: hidden;
+}
+
+.toggle-enter.toggle-enter-active {
+  max-height: 300px;
+  overflow: hidden;
+  transition: max-height 0.7s ease-in;
+}
+.toggle-leave {
+  max-height: 300px;
+  overflow: hidden;
+}
+.toggle-leave.toggle-leave-active {
+  overflow: hidden;
+  transition: max-height 0.7s ease-out;
+}
+

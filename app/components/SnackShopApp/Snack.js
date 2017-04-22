@@ -26,6 +26,7 @@ var collect = (connect, monitor) => {
 }
 
 class Snack extends Component {
+  
   render() {
     const {name, isDragging, didDrop, connectDragSource} = this.props;
     const opacity = isDragging ? 0.3 : 1;
@@ -33,14 +34,14 @@ class Snack extends Component {
     var style = {
       opacity: opacity,
       cursor: 'pointer',
-      visibility: visibility
+      
     }
-    return (
-      connectDragSource(
-        <p style={style}>
+    return connectDragSource(
+      
+        <div style={style}>
           {this.props.name}
-        </p>
-      )
+        </div>
+      
     );
   }
 }
