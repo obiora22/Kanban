@@ -1,6 +1,9 @@
 body {
   font-family: monospace;
 }
+#kanbanboard {
+ position: absolute;
+}
 .checkList-task-remove::after {
   display: inline-block;
   font-weight: bold;
@@ -12,19 +15,24 @@ body {
   z-index: 1;
   background-color: #fff;
   box-shadow: 0 1px 0 rgba(0, 0, 0, 0.25);
+  margin-bottom: 10px;
 }
-.card h3 {
-  border: 2px solid #000;
+.card section {
+  padding: 10px;
 }
 .card p {
-  padding: 10px;
-  border-bottom: 2px dotted #000;
+  padding: 5px;
 }
 
 .card p, .card h3 {
   text-align: center;
   width: 80%;
   margin: 15px auto;
+}
+
+.glyphicon-plus-sign {
+  font-size: 3em;
+  color: darkorange;
 }
 
 fieldset {
@@ -34,6 +42,7 @@ fieldset {
 .form-check-input {
   margin-right: 10px!important;
 }
+
 .list {
   background: linear-gradient(to bottom, #eee 0%, #ccc 50%, #eee 100%) fixed;
 }

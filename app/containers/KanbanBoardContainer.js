@@ -1,5 +1,8 @@
 import React, {Component} from 'react';
 import KanbanBoard from '../components/KanbanBoard';
+import NewCard from '../components/NewCard';
+import EditCard from '../components/EditCard';
+import {Route} from 'react-router-dom';
 import update from 'immutability-helper';
 import HTML5Backend from 'react-dnd-html5-backend';
 import {DragDropContext} from 'react-dnd';
@@ -86,6 +89,82 @@ class KanbanBoardContainer extends Component {
         cards: newCards
       })
     }
+  }
+
+  addCard(card) {
+    // Keep a reference to original state incase of 
+    // need to reverse optimistic changes made to UI
+    var prevState = this.state;
+    
+    /*
+      Making an optimistic change: I'm modifying the UI
+      by pushing new card inot the `this.state.cards` on the 
+      assumption that API call will be successful, and a new 
+      card will be added to the data base.
+    */
+    var nextState = update(this.state.cards, {$push: [card]});
+
+    this.setState({cards: nextState})
+
+    //make API call to add new card to collection
+    fetch(`${API_URL}/cards`, {
+      method: 'post',
+      headers: API_HEADERS,
+      body: JSON.stringify(card)
+    })
+    .then((response) => {
+      if (response.ok) {
+        return response.json();
+      } else {
+        throw new Error('Something went wrong with server reuest!');
+      }
+    })
+    .then((responseData) => {
+      // `this.states.cards` holds a reference to card
+      card.id = responseData.id;
+      this.setState({cards: nextState});
+    })
+    .catch((error) => {
+      console.error(error);
+      this.setState(prevState);
+    }) 
+
+  }
+  
+  updateCard(currentCard) {
+    var prevState = this.state;
+
+    var currentCardIndex = this.state.cards.findIndex((card) => {
+      return card.id === currentCard.id
+    });
+
+    var nextState = update(this.state.cards, {
+      [currentCardIndex]: {$set: currentCard}
+    });
+
+    this.setState(nextState);
+
+    fetch(`${API_URL}/cards/${currentCard.id}`, {
+      method: 'put',
+      headers: API_HEADERS,
+      body: JSON.stringify(currentCard)
+    })
+    .then((response) => {
+      if (response.ok) {
+        return response.json();
+      } else {
+        console.log(response);
+        throw new Error('Something went wrong with server request!');
+      }
+    })
+    .then((responseData) => {
+      currentCard.id = responseData.id;
+      this.setState({cards: nextState})
+    })
+    .catch((error) => {
+      console.error(error);
+      this.setState(prevState);
+    })
   }
   addTask(cardId, taskName) {
     var cardIndex = this.state.cards.findIndex((card) => card.id === cardId);
@@ -180,6 +259,7 @@ class KanbanBoardContainer extends Component {
   }
   render() {
     return (
+      <div>
       <KanbanBoard
         cards={this.state.cards}
         taskCallbacks={{
@@ -193,6 +273,35 @@ class KanbanBoardContainer extends Component {
           persistCardDrag: this.persistCardDrag.bind(this)
         }}
       />
+      {/*React Router v4 allows nesting Route components*/}
+       <Route exact path="/new" render={(props) => {
+         return <NewCard 
+         history={props.history}
+            cardCallbacks={{
+              addCard: this.addCard.bind(this),
+              updateCard: this.updateCard.bind(this),
+              updateCardStatus: this.updateCardStatus,
+              updateCardPosition: this.updateCardPosition,
+              persistCardDrag: this.persistCardDrag.bind(this)
+          }}
+          />
+       }} />
+        <Route path="/edit/:card_id" render={(props) => {
+          console.log(props)
+          return <EditCard 
+            match={props.match}
+            history={props.history}
+            cards={this.state.cards}
+            cardCallbacks={{
+              addCard: this.addCard.bind(this),
+              updateCard: this.updateCard.bind(this),
+              updateCardStatus: this.updateCardStatus,
+              updateCardPosition: this.updateCardPosition,
+              persistCardDrag: this.persistCardDrag.bind(this)
+          }}
+          />
+        }} />
+      </div>
     );
   }
 }

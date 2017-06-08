@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import ReactDOM from 'react-dom';
 import KanbanBoard from './KanbanBoard';
 import KanbanBoardContainer from '../containers/KanbanBoardContainer';
+import AppRoute from './AppRoute';
 let cardsList = [
 {
 id: 1,
@@ -38,8 +39,8 @@ class App extends Component {
   render() {
     console.log(cardsList);
     return (
-      <div style={{border: "1px solid green", padding: "10px"}}>
-      <KanbanBoardContainer />
+      <div style={{border: "1px solid green", padding: "10px"}} id="main-container">
+        <AppRoute />
       </div>
     );
   }

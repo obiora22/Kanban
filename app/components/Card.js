@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
+import {Link} from 'react-router-dom';
 import CheckList from './CheckList';
 import {DragSource, DropTarget} from 'react-dnd';
 import marked from 'marked';
@@ -19,6 +20,7 @@ var dropTargetCollect = (connect, monitor) => {
 }
 var cardSpec = {
   beginDrag(props, monitor, component) {
+    console.log(props);
     return {
       id: props.cardId,
       status: props.status
@@ -85,10 +87,16 @@ class Card extends Component {
     </form>);
     
     return this.props.connectDropTarget(this.props.connectDragSource(
-      <div style={{border: "1px solid purple"}} className="card">
-        <h3>{this.props.title}</h3>
+      <div  className="card" style={{borderTop: `5px solid ${this.props.cardColor}`}}>
+         <section className="text-right">
+           <Link to={`/edit/${this.props.cardId}`}><span className="glyphicon glyphicon-pencil"></span></Link>
+         </section>
+         <p className="card-title" >
+           <span className="glyphicon glyphicon-triangle-right"></span> {this.props.title}
+         </p>
         <span dangerouslySetInnerHTML={{__html: marked(this.props.description)}}/>
         <button className="card-detail-reveal-btn" type="button" onClick={this.toggleDetails}>{this.state.showDetails ? "hide" : "show"}</button>
+        <span></span>
         <ReactCSSTransitionGroup
             transitionName='toggle'
             transitionLeaveTimeout={300}
@@ -99,8 +107,8 @@ class Card extends Component {
         
         
         <form onSubmit={this.handleUserInput.bind(this)}>
-          <input type="text" name="taskName" placeholder="Type and hit enter to add a task." />
-          <button type="submit">Create Task</button>
+          <input type="text" className="form-control" name="taskName" placeholder="Type and hit enter to add a task." />
+
         </form>
       </div>
     ));
@@ -108,6 +116,7 @@ class Card extends Component {
 }
 
 Card.propTypes = {
+  cardColor: PropTypes.string.isRequired,
   cardId: PropTypes.number.isRequired,
   title: PropTypes.string.isRequired,
   status: PropTypes.string.isRequired,
